@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+import markdown
+from django.utils.html import strip_tags
 
 # Create your models here.
 '''
@@ -93,3 +95,20 @@ class Post(models.Model):
     def increase_views(self):
         self.views += 1
         self.save(update_fields=['views'])
+
+    # 重写save方法，为了从正文字段摘取前N个字符保存到摘要字段。
+    def save(self, *args, **kwargs):
+        # 如果没有填写摘要
+        if not self.excerpt:
+            # 首先渲染一个Markdown类，用于渲染body文本
+            md = markdown.Markdown(extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite'
+            ])
+            # 先将Markdown文本渲染成HTML文本
+            # strip_tags去掉HTML文本的全部HTML标签
+            # 从文本前摘取前54个字符赋给excerpt
+            self.excerpt = strip_tags(md.convert(self.body))[:54]
+
+        # 调用父类的save方法将数据保存到数据库中
+        super(Post, self).save(*args, **kwargs)
