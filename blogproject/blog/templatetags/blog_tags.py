@@ -4,6 +4,8 @@ from ..models import Post, Category, Tags
 # { % get_recent_posts() %}
 from django import template
 
+from django.db.models.aggregates import Count
+
 register = template.Library()
 
 
@@ -17,8 +19,9 @@ def get_recent_posts(num=5):
 @register.simple_tag()
 def get_categories():
     # 顶部引进category类
-    return Category.objects.all()
-
+    # 顶部引入count函数
+    return Category.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)
+    # return Category.objects.all()
 
 # 归档模板标签
 @register.simple_tag()
@@ -34,4 +37,4 @@ def archives():
 
 @register.simple_tag()
 def get_tags():
-    return Tags.objects.all().order_by('-id')
+    return Tags.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)

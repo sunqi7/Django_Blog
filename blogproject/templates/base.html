@@ -61,8 +61,6 @@
         </div>
     </header>
 </div>
-<div class="copyrights">Collect from <a href="http://www.cssmoban.com/">网页模板</a></div>
-<div class="copyrights">Modified by <a href="http://zmrenwu.com/">追梦人物的博客</a></div>
 
 <div class="content-body">
     <div class="container">
@@ -111,7 +109,7 @@
                         <li>
                             <!--{% url 'blog:Category' categories.pk %}-->
                             <!--{{ categories.get_category_url }}-->
-                            <a href="{{ categories.get_category_url }}">{{categories.name}} <span class="post-count">(13)</span></a>
+                            <a href="{{ categories.get_category_url }}">{{categories.name}} <span class="post-count">({{categories.num_posts}})</span></a>
                         </li>
                         {% empty %}
                         没有分类
@@ -132,7 +130,7 @@
                     </ul>
                 </div>
                 <div class="rss">
-                    <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                    <a href="{% url 'rss' %}"><span class="ion-social-rss-outline"></span> RSS 订阅</a>
                 </div>
             </aside>
         </div>

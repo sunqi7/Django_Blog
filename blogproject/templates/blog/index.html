@@ -34,19 +34,79 @@
     <a href="#">下一页</a>
 </div>
 -->
+
+
+<!--分页-->
+<!--{% if is_paginated %}-->
+<!--<div class="pagination">-->
+<!--<ul>-->
+<!--&lt;!&ndash;<li><a href="">1</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;<li><a href="">...</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;<li><a href="">4</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;<li><a href="">5</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;<li class="current"><a href="">6</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;<li><a href="">7</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;<li><a href="">8</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;<li><a href="">...</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;<li><a href="">11</a></li>&ndash;&gt;-->
+
+<!--&lt;!&ndash;如果当前页还有上一页，就显示上一页的按钮&ndash;&gt;-->
+<!--{% if page_obj.has_previous %}-->
+<!--<li><a href="?page={{page_obj.previous_page_number}}">上一页</a></li>-->
+<!--{% endif %}-->
+
+<!--&lt;!&ndash;显示当前页面的信息&ndash;&gt;-->
+<!--<li class="current">第{{page_obj.number}}页/共{{paginator.num_pages}}页</li>-->
+
+<!--&lt;!&ndash;如果当前页还有下一页，就显示下一页的按钮&ndash;&gt;-->
+<!--{% if page_obj.has_next %}-->
+<!--<li><a href="?page={{page_obj.next_page_number}}">下一页</a></li>-->
+<!--{% endif %}-->
+<!--</ul>-->
+<!--</div>-->
+<!--{% endif %}-->
+
+
+{% if is_paginated %}
 <div class="pagination">
     <ul>
-        <li><a href="">1</a></li>
-        <li><a href="">...</a></li>
-        <li><a href="">4</a></li>
-        <li><a href="">5</a></li>
-        <li class="current"><a href="">6</a></li>
-        <li><a href="">7</a></li>
-        <li><a href="">8</a></li>
-        <li><a href="">...</a></li>
-        <li><a href="">11</a></li>
+        <!--第一页页码-->
+        {% if first %}
+        <li><a href="?page=1">1</a></li>
+        {% endif %}
+
+        <!--左侧页码-->
+        {% if left %}
+        <!--第一页后的省略号-->
+            {% if left_has_more %}
+            <li><span>...</span></li>
+            {% endif %}
+            {% for i in left %}
+            <li><a href="?page={{i}}">{{i}}</a></li>
+            {% endfor%}
+        {% endif %}
+
+        <!--当前页码-->
+        <li><a href="?page={{page_obj.number}}" style="color: red;"> {{page_obj.number}} </a></li>
+
+        <!--右侧页码-->
+        {% if right %}
+            {% for i in right %}
+            <li><a href="?page={{i}}">{{i}}</a></li>
+            {% endfor %}
+            <!--最后一页前的省略号-->
+            {% if right_has_more %}
+            <li><span>...</span></li>
+            {% endif %}
+        {% endif %}
+
+        <!--最后一页页码-->
+        {% if last %}
+            <li><a href="?page={{paginator.num_pages}}">{{paginator.num_pages}}</a></li>
+        {% endif %}
     </ul>
 </div>
+{% endif %}
 {% endblock main %}
 
 
