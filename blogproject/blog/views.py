@@ -9,6 +9,9 @@ from comments.forms import CommentForm
 # 将index视图函数改写成类函数,引入ListView的方法
 from django.views.generic import ListView, DetailView
 
+# 搜索
+from django.db.models import Q
+
 # 引入Markdown模块
 '''
 Markdown 是一种 HTML 文本标记语言，只要遵循它约定的语法格式，Markdown 的渲染器就能够把我们写的文章转换为标准的 HTML 文档，
@@ -188,7 +191,6 @@ def detail(request, pk):
             'markdown.extensions.toc',
         ])
 
-
     # 将文章、表单以及文章下的评论列表作为模板变量传给detail.html模板，以便渲染相应数据
     context = {
         'post': post,
@@ -223,11 +225,13 @@ class PostDetailView(DetailView):
     def get_object(self, queryset=None):
         # 编写get_object方法的目的是因为需要对post的body值进行渲染
         post = super(PostDetailView, self).get_object(queryset=None)
-        post.body = markdown.markdown(post.body, extensions=[
+        md = markdown.markdown(post.body, extensions=[
             'markdown.extensions.extra',
             'markdown.extensions.codehilite',
             'markdown.extensions.toc',
         ])
+        post.body = md.convert(post.body)
+        post.toc = md.toc
         return post
 
     def get_context_data(self, **kwargs):
@@ -431,3 +435,16 @@ class Tagview(ListView):
         }
 
         return data
+
+
+# 搜索
+def search(request):
+    q = request.GET.get('q')
+    error_msg = ''
+
+    if not q:
+        error_msg = '请输入关键词'
+        return render(request, 'blog/index.html', {'error_msg': error_msg})
+
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
+    return render(request, 'blog/index.html', {'error_msg': error_msg, 'post_list': post_list})

@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block main%}
+{% if error_msg %}
+<p>{{ error_msg }}</p>
+{% endif %}
 {% for post in post_list %}
 <article class="post post-{{ post.pk }}">
     <header class="entry-header">
@@ -78,12 +81,12 @@
         <!--左侧页码-->
         {% if left %}
         <!--第一页后的省略号-->
-            {% if left_has_more %}
-            <li><span>...</span></li>
-            {% endif %}
-            {% for i in left %}
-            <li><a href="?page={{i}}">{{i}}</a></li>
-            {% endfor%}
+        {% if left_has_more %}
+        <li><span>...</span></li>
+        {% endif %}
+        {% for i in left %}
+        <li><a href="?page={{i}}">{{i}}</a></li>
+        {% endfor%}
         {% endif %}
 
         <!--当前页码-->
@@ -91,18 +94,18 @@
 
         <!--右侧页码-->
         {% if right %}
-            {% for i in right %}
-            <li><a href="?page={{i}}">{{i}}</a></li>
-            {% endfor %}
-            <!--最后一页前的省略号-->
-            {% if right_has_more %}
-            <li><span>...</span></li>
-            {% endif %}
+        {% for i in right %}
+        <li><a href="?page={{i}}">{{i}}</a></li>
+        {% endfor %}
+        <!--最后一页前的省略号-->
+        {% if right_has_more %}
+        <li><span>...</span></li>
+        {% endif %}
         {% endif %}
 
         <!--最后一页页码-->
         {% if last %}
-            <li><a href="?page={{paginator.num_pages}}">{{paginator.num_pages}}</a></li>
+        <li><a href="?page={{paginator.num_pages}}">{{paginator.num_pages}}</a></li>
         {% endif %}
     </ul>
 </div>

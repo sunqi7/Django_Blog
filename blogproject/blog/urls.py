@@ -19,5 +19,8 @@ urlpatterns = [
     # url(r'^post/(?P<pk>[0-9]+)$', views.PostDetailView.as_view(), name='detail'),
 
     # url(r'^tag/(?P<pk>[0-9]+)/$', views.tags, name='tag')
-    url(r'^tag/(?P<pk>[0-9]+)/$', views.Tagview.as_view(), name='tag')
+    url(r'^tag/(?P<pk>[0-9]+)/$', views.Tagview.as_view(), name='tag'),
+
+    # 搜索
+    # url(r'^search/$', views.search, name='search')
 ]
